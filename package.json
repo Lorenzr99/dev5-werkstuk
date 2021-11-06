@@ -10,7 +10,8 @@
     "jest": "^27.3.1",
     "knex": "^0.95.13",
     "nodemon": "^2.0.14",
-    "pg": "^8.7.1"
+    "pg": "^8.7.1",
+    "supertest": "^6.1.6"
   },
   "devDependencies": {},
   "scripts": {

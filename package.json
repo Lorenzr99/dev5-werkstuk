@@ -4,6 +4,7 @@
   "description": "",
   "main": "./api/server.js",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "dotenv-expand": "^5.1.0",
     "express": "^4.17.1",
@@ -16,7 +17,7 @@
   "devDependencies": {},
   "scripts": {
     "start": "nodemon ./api/server.js",
-    "test": "jest --watch --detectOpenHandles --unhandled-rejections=strict"
+    "test": "jest --watch --forceExit --detectOpenHandles --unhandled-rejections=strict"
   },
   "repository": {
     "type": "git",

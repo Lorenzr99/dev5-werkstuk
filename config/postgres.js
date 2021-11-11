@@ -2,17 +2,30 @@ const dotenv = require('dotenv').config();
 const dotenvExpand = require('dotenv-expand');
 dotenvExpand(dotenv);
 
+/**
+ * Establish connection with the database.
+ */
+
 const pg = require('knex')({
     client: 'pg',
     connection: process.env.PG_CONNECTION_STRING,
     searchPath: ['knex', 'public'],
 });
 
+/**
+ * Drops following tables if they already exist in the database:
+ * 'festivals, requests, users'
+ */
+
 const dropTablesIfExists = async () => {
     await pg.schema.withSchema('public').dropTableIfExists('festivals');
     await pg.schema.withSchema('public').dropTableIfExists('requests');
     await pg.schema.withSchema('public').dropTableIfExists('users');
 }
+
+/**
+ * Creates the tables and adds all necessary columns.
+ */
 
 const schemaBuilder = async () => {
     await pg.schema.withSchema('public').createTable('users', table => {

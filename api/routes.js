@@ -1,16 +1,7 @@
+const { pg } = require('../config/postgres');
 const express = require('express');
 const festivalRouter = express.Router();
 const requestRouter = express.Router();
-
-const dotenv = require('dotenv').config()
-const dotenvExpand = require('dotenv-expand');
-dotenvExpand(dotenv);
-
-const pg = require('knex')({
-    client: 'pg',
-    connection: process.env.PG_CONNECTION_STRING,
-    searchPath: ['knex', 'public'],
-});
 
 const getAllFestivalsHandler = (req,res) => {
     // TEST: check if PostgreSQL is connected

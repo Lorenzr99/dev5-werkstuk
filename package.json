@@ -16,7 +16,7 @@
   "devDependencies": {},
   "scripts": {
     "start": "nodemon ./api/server.js",
-    "test": "jest --watch --detectOpenHandles --unhandled-rejections=strict"
+    "test": "jest --watch --detectOpenHandles"
   },
   "repository": {
     "type": "git",

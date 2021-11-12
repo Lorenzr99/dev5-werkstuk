@@ -6,10 +6,11 @@ const requestRouter = express.Router();
 /**
  * Handler of the 'GET /festivals & GET /requests' endpoint.
  * Retrieves all rows of the specified 'table'
- * and sends these rows as a JSON response.
+ * and sends these rows back as a JSON response.
  * @param {*} req contains the request of the user 
  * @param {*} res sends the response to the user
  * @param {string} table the table which will be targeted
+ * @returns {object} all rows are returned as a JSON object
  */
 
 const getAllFestivalsHandler = (req,res,table) => {
@@ -28,10 +29,11 @@ const getAllFestivalsHandler = (req,res,table) => {
 /**
  * Handler of the 'PUT /festivals & PUT /requests' endpoint.
  * Updates all values of a row with the specified 'id'
- * and sends the updated row as a JSON response.
+ * and sends the updated row back as a JSON response.
  * @param {*} req contains the request of the user 
  * @param {*} res sends the response to the user
  * @param {string} table the table which will be targeted
+ * @returns {object} the updated row is returned as a JSON object
  */
 
 const updateFestivalHandler = (req,res,table) => {
@@ -58,10 +60,11 @@ const updateFestivalHandler = (req,res,table) => {
 /**
  * Handler of the 'DELETE /festivals & DELETE /requests' endpoint.
  * Deletes a row with the specified 'id'
- * and sends the 'id' of the deleted row as a JSON response.
+ * and sends the 'id' of the deleted row back as a JSON response.
  * @param {*} req contains the request of the user 
  * @param {*} res sends the response to the user
  * @param {string} table the table which will be targeted
+ * @returns {object} the 'id' of the deleted row is returned as a JSON object
  */
 
 const deleteFestivalHandler = (req,res,table) => {

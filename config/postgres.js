@@ -1,6 +1,10 @@
-const dotenv = require('dotenv').config();
-const dotenvExpand = require('dotenv-expand');
-dotenvExpand(dotenv);
+/**
+ * Require package to use .env variables outside of Docker.
+ */
+
+//const dotenv = require('dotenv').config();
+//const dotenvExpand = require('dotenv-expand');
+//dotenvExpand(dotenv);
 
 /**
  * Establish connection with the database.
@@ -8,7 +12,7 @@ dotenvExpand(dotenv);
 
 const pg = require('knex')({
     client: 'pg',
-    connection: process.env.PG_CONNECTION_STRING,
+    connection: process.env.PG_CONNECTION_STRING ? process.env.PG_CONNECTION_STRING : "postgres://test:test@localhost:5432/test",
     searchPath: ['knex', 'public'],
 });
 

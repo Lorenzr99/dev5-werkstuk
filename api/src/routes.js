@@ -1,4 +1,6 @@
-const { pg } = require('../config/postgres');
+const {
+    pg
+} = require('./config/postgres');
 const express = require('express');
 const festivalRouter = express.Router();
 const requestRouter = express.Router();
@@ -13,7 +15,7 @@ const requestRouter = express.Router();
  * @returns {object} all rows are returned as a JSON object
  */
 
-const getAllFestivalsHandler = (req,res,table) => {
+const getAllFestivalsHandler = (req, res, table) => {
     pg.select().from(table)
         .then((data) => {
             res.status(200).json(data);
@@ -23,7 +25,7 @@ const getAllFestivalsHandler = (req,res,table) => {
             res.status(400).json({
                 message: "Kon data niet ophalen!"
             });
-    });
+        });
 }
 
 /**
@@ -36,7 +38,7 @@ const getAllFestivalsHandler = (req,res,table) => {
  * @returns {object} the updated row is returned as a JSON object
  */
 
-const updateFestivalHandler = (req,res,table) => {
+const updateFestivalHandler = (req, res, table) => {
     pg(table)
         .where('id', req.body.id)
         .update({
@@ -67,7 +69,7 @@ const updateFestivalHandler = (req,res,table) => {
  * @returns {object} the 'id' of the deleted row is returned as a JSON object
  */
 
-const deleteFestivalHandler = (req,res,table) => {
+const deleteFestivalHandler = (req, res, table) => {
     pg(table)
         .where('id', req.body.id)
         .del()
@@ -88,22 +90,22 @@ const deleteFestivalHandler = (req,res,table) => {
  */
 
 festivalRouter.route('/festivals')
-    .get((req,res) => getAllFestivalsHandler(req, res, "festivals"))
-    .put((req,res) => updateFestivalHandler(req, res, "festivals"))
-    .delete((req,res) => deleteFestivalHandler(req, res, "festivals"));
+    .get((req, res) => getAllFestivalsHandler(req, res, "festivals"))
+    .put((req, res) => updateFestivalHandler(req, res, "festivals"))
+    .delete((req, res) => deleteFestivalHandler(req, res, "festivals"));
 
 /**
  * All endpoints from the '/requests' route.
  */
 
 requestRouter.route('/requests')
-    .get((req,res) => getAllFestivalsHandler(req, res, "requests"))
-    .put((req,res) => updateFestivalHandler(req, res, "requests"))
-    .delete((req,res) => deleteFestivalHandler(req, res, "requests"));
+    .get((req, res) => getAllFestivalsHandler(req, res, "requests"))
+    .put((req, res) => updateFestivalHandler(req, res, "requests"))
+    .delete((req, res) => deleteFestivalHandler(req, res, "requests"));
 
-module.exports = { 
-    festivalRouter, 
-    requestRouter, 
+module.exports = {
+    festivalRouter,
+    requestRouter,
     getAllFestivalsHandler,
     updateFestivalHandler,
     deleteFestivalHandler,

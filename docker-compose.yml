@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  api:
+    container_name: api
+    build: ./
+    environment:
+      PG_CONNECTION_STRING: "postgres://${PG_USER}:${PG_PASSWORD}@${PG_DATABASE}:${DB_PORT}"
+      PORT:
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"     
+
+  postgres:
+    container_name: ${PG_DATABASE}
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: ${PG_DATABASE}
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"       

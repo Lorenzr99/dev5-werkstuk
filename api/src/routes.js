@@ -22,10 +22,35 @@ const getAllFestivalsHandler = (req, res, table) => {
         })
         .catch((e) => {
             console.error(e);
-            res.status(400).json({
+            res.status(404).json({
                 message: "Kon data niet ophalen!"
             });
         });
+}
+
+const isFestivalRequestValid = (body) => {
+    if (body) {
+        const nameRegex = /^[a-zA-Z ]{2,30}$/;
+        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+        const descriptionRegex = /^[.,\/#!$%\^&\*;:{}=\-_`~()a-zA-Z0-9\n _]*$/;
+
+        if (nameRegex.test(body.name) &&
+            body.date_begin.match(dateRegex) &&
+            body.date_end.match(dateRegex) &&
+            descriptionRegex.test(body.description)) {
+                const beginDateTime = new Date(body.date_begin).getTime();
+                const endDateTime = new Date(body.date_end).getTime();
+
+            if (!beginDateTime &&
+                beginDateTime !== 0 ||
+                !endDateTime &&
+                endDateTime !== 0) {
+                    return false;
+            }
+            return true;
+        }
+    }
+    return false;
 }
 
 /**
@@ -39,23 +64,30 @@ const getAllFestivalsHandler = (req, res, table) => {
  */
 
 const updateFestivalHandler = (req, res, table) => {
-    pg(table)
-        .where('id', req.body.id)
-        .update({
-            name: req.body.name,
-            date_begin: req.body.date_begin,
-            date_end: req.body.date_end,
-            description: req.body.description,
-        }, '*')
-        .then(festival => {
-            res.status(200).json(festival);
-        })
-        .catch((e) => {
-            console.log(e);
-            res.status(400).json({
-                message: "Kon festival niet updaten!"
+    if(isFestivalRequestValid(req.body)) {
+        pg(table)
+            .where('id', req.body.id)
+            .update({
+                name: req.body.name,
+                date_begin: req.body.date_begin,
+                date_end: req.body.date_end,
+                description: req.body.description,
+            }, '*')
+            .then(festival => {
+                res.status(200).json(festival);
             })
+            .catch((e) => {
+                console.log(e);
+                res.status(404).json({
+                    message: "Kon festival niet updaten!"
+                })
+            });        
+    } else {
+        console.log("Ongeldige request body!");
+        res.status(400).json({
+            message: "Ongeldige request body!"
         });
+    }
 }
 
 /**
@@ -77,7 +109,7 @@ const deleteFestivalHandler = (req, res, table) => {
         })
         .catch((e) => {
             console.log(e);
-            res.status(400).json({
+            res.status(404).json({
                 message: "Kon festival niet verwijderen!"
             })
         })
@@ -104,7 +136,5 @@ requestRouter.route('/requests')
 module.exports = {
     festivalRouter,
     requestRouter,
-    getAllFestivalsHandler,
-    updateFestivalHandler,
-    deleteFestivalHandler,
+    isFestivalRequestValid,
 };

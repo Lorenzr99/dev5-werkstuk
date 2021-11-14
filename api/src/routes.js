@@ -46,8 +46,7 @@ const updateFestivalHandler = (req, res, table) => {
             date_begin: req.body.date_begin,
             date_end: req.body.date_end,
             description: req.body.description,
-        })
-        .returning('*')
+        }, '*')
         .then(festival => {
             res.status(200).json(festival);
         })
@@ -72,8 +71,7 @@ const updateFestivalHandler = (req, res, table) => {
 const deleteFestivalHandler = (req, res, table) => {
     pg(table)
         .where('id', req.body.id)
-        .del()
-        .returning('id')
+        .del('id')
         .then(id => {
             res.status(200).json(id);
         })

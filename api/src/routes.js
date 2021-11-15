@@ -28,6 +28,12 @@ const getAllFestivalsHandler = (req, res, table) => {
         });
 }
 
+/**
+ * Checks if the request body is valid.
+ * @param {request} body the request body sent by the user
+ * @returns {boolean} true if request is valid, false if request is invalid
+ */
+
 const isFestivalRequestValid = (body) => {
     if (body) {
         const nameRegex = /^[a-zA-Z ]{2,30}$/;

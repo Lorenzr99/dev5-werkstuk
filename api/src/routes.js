@@ -35,10 +35,10 @@ const getAllFestivalsHandler = (req, res, table) => {
  */
 
 const isFestivalRequestValid = (body) => {
-    if (body) {
+    if (body && JSON.stringify(body) !== '{}') {
         const nameRegex = /^[a-zA-Z ]{2,30}$/;
         const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-        const descriptionRegex = /^[.,\/#!$%\^&\*;:{}=\-_`~()a-zA-Z0-9\n _]*$/;
+        const descriptionRegex = /^['.",\/#!%\^&\*;:=\-()a-zA-Z0-9\n _]*$/;
 
         if (nameRegex.test(body.name) &&
             body.date_begin.match(dateRegex) &&

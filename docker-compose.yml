@@ -7,7 +7,8 @@ services:
       PG_CONNECTION_STRING: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${DB_PORT}/${POSTGRES_DB}"
       PORT:
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     ports:
       - "3000:3000"
     volumes:
@@ -16,6 +17,11 @@ services:
   postgres:
     image: "postgres:latest"
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
       POSTGRES_USER:
@@ -25,3 +31,9 @@ services:
       - "5432:5432"     
     volumes:
       - ./_volumes/pg:/var/lib/postgresql/data  
+
+  watchtower:
+    image: containrrr/watchtower
+    command: "--interval 60 --cleanup"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

@@ -1,7 +1,10 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const { festivalRouter, requestRouter } = require('./routes');
+const {
+    festivalRouter,
+    requestRouter
+} = require('./routes');
 
 app.use(express.json());
 app.use(cors());

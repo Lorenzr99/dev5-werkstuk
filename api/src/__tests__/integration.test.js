@@ -141,7 +141,9 @@ describe('requestRouter', () => {
 afterAll(async () => {
     try {
         await pg('festivals').where('name', 'Rock Werchter').del();
+        await pg('festivals').where('name', 'Reggae Geel').del();
         await pg('requests').where('name', 'Graspop').del();
+        await pg('requests').where('name', 'Lokerse Feesten').del();
         await pg.destroy();        
     } catch (e) {
         console.log(e);

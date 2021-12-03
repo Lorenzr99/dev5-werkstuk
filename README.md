@@ -7,13 +7,12 @@ Deze rest-full API is verbonden met een [PostgreSQL](https://www.postgresql.org/
 1. git clone https://github.com/Lorenzr99/dev5-werkstuk
 2. .env file aanmaken op basis van .env.template
 3. docker-compose up --build
-4. Om de testen uit te voeren: 'cd .\api\' en run vervolgens 'npm test'
+4. Om de testen uit te voeren: "cd .\api\" en run vervolgens "npm test"
 
 ## Endpoints
 - GET '/api/festivals': returnt alle festivals in de database
 - PUT '/api/festivals': wijzig een row in de festivals table
 - DELETE '/api/festivals': verwijder een row in de festivals table
-<br>
 - GET '/api/requests': returnt alle requests in de database
 - PUT '/api/requests': wijzig een row in de requests table
 - DELETE '/api/requests': verwijder een row in de requests table

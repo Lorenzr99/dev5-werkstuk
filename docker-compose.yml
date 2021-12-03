@@ -18,7 +18,7 @@ services:
     image: "postgres:latest"
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U test -d festivalwijzer"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 5

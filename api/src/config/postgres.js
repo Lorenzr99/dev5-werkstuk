@@ -18,7 +18,7 @@ const schemaBuilder = async () => {
             return await pg.schema.withSchema('public').createTable('users', table => {
                 table.increments();
                 table.string('username').notNullable();
-                table.string('email').notNullable();
+                table.string('email').unique().notNullable();
                 table.string('password').notNullable();
                 table.date('date_birth');
                 table.timestamps();

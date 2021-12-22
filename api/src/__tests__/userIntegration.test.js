@@ -16,7 +16,7 @@ describe('SignUp', () => {
             .then(res => {
                 expect(res.status).toBe(200);
                 expect(res.body).toBeDefined();
-                expect(res.body.message).toEqual("User signed up successfully!");
+                expect(res.body[0]).toEqual("lorenz@student.be");
             })
             .then(res => done());
     });

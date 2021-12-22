@@ -1,9 +1,6 @@
 const app = require('../index');
 const supertest = require('supertest');
 const request = supertest(app);
-const {
-    pg
-} = require('../config/postgres');
 
 describe('SignUp', () => {
     test('POST / endpoint', (done) => {

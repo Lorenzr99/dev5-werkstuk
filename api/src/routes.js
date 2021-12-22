@@ -11,11 +11,13 @@ const jwt = require('jsonwebtoken');
 
 const isSignUpRequestValid = (body) => {
     if (body && JSON.stringify(body) !== '{}') {
-        const usernameRegex = /^[a-zA-Z0-9]{3,25}$/;
+        const usernameRegex = /^[a-zA-Z0-9 ]{3,25}$/;
+        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
         const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
         const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
 
         if (usernameRegex.test(body.username) &&
+            emailRegex.test(body.email) &&
             body.date_birth.match(dateRegex) &&
             passwordRegex.test(body.password)) {
                 const birthDateTime = new Date(body.date_birth).getTime();

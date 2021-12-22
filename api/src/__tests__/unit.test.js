@@ -1,5 +1,6 @@
 const {
-    isFestivalRequestValid
+    isFestivalRequestValid,
+    isSignUpRequestValid
 } = require('../routes');
 
 test('check if festival req.body is valid', () => {
@@ -32,4 +33,38 @@ test('check if festival req.body is valid', () => {
     expect(isFestivalRequestValid({...requestBody, description: "Voor slechts €150"})).toBeFalsy();
     expect(isFestivalRequestValid({...requestBody, description: "Mail ons nu op example@example.com"})).toBeFalsy();
     expect(isFestivalRequestValid({...requestBody, description: "<p>Dit is een paragraaf<p>"})).toBeFalsy();
+});
+
+test('check if signup req.body is valid', () => {
+    const requestBody = {
+        username: "Lorenz Reweghs",
+        email: "lorenz@student.be",
+        password: "Lorenz123",
+        date_birth: "1999-03-02",
+    };
+
+    expect(isSignUpRequestValid(requestBody)).toBeTruthy();
+    expect(isSignUpRequestValid({})).toBeFalsy();
+
+    // A name must contain at least 3 and maximum 25 characters.
+    // Special characters are not allowed.
+    expect(isSignUpRequestValid({...requestBody, username: "Lr"})).toBeFalsy();
+    expect(isSignUpRequestValid({...requestBody, username: "LorenzReweghs9876412657813"})).toBeFalsy();
+    expect(isSignUpRequestValid({...requestBody, username: "Lorenz&%Reweghs"})).toBeFalsy();
+
+    // An email must contain an @ symbol, but no other special characters.
+    expect(isSignUpRequestValid({...requestBody, email: "lorenz#reweghs@student.be"})).toBeFalsy();
+    expect(isSignUpRequestValid({...requestBody, email: "lorenz.student.be"})).toBeFalsy();
+
+    // A password must contain at least 8 characters, with at least one digit, one lower case and one upper case character.
+    expect(isSignUpRequestValid({...requestBody, password: "lorenz"})).toBeFalsy();
+    expect(isSignUpRequestValid({...requestBody, password: "lorenz123"})).toBeFalsy();
+    expect(isSignUpRequestValid({...requestBody, password: "Lorenzzzz"})).toBeFalsy();
+
+    // A date must follow the format 'yyyy-mm-dd'.
+    // The month has to be between 01 and 12, the day between 01 and 31.
+    expect(isSignUpRequestValid({...requestBody, date_birth: "07-13-2022"})).toBeFalsy();
+    expect(isSignUpRequestValid({...requestBody, date_birth: "20022-07-13"})).toBeFalsy();
+    expect(isSignUpRequestValid({...requestBody, date_birth: "2022-07-35"})).toBeFalsy();
+    expect(isSignUpRequestValid({...requestBody, date_birth: "2022-13-07"})).toBeFalsy();
 });

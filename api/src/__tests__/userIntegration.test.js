@@ -6,11 +6,13 @@ const {
 } = require('../config/postgres');
 
 describe('SignUp', () => {
-    test('POST / endpoint SUCCESS', (done) => {
+    test('POST / endpoint', (done) => {
         request.post('/api/signup')
             .send({
+                username: "Lorenz Reweghs",
                 email: "lorenz@student.be",
                 password: "lorenz123",
+                date_birth: "1999-03-02",
             })
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
@@ -18,20 +20,6 @@ describe('SignUp', () => {
                 expect(res.status).toBe(200);
                 expect(res.body).toBeDefined();
                 expect(res.body.message).toEqual("User signed up successfully!");
-            })
-            .then(res => done());
-    });
-
-    test('POST / endpoint ERROR', (done) => {
-        request.post('/api/signup')
-            .send({
-                email: "lorenz@student.be",
-            })
-            .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
-            .then(res => {
-                expect(res.status).toBe(400);
-                expect(res.body.error).toBeDefined();
             })
             .then(res => done());
     });

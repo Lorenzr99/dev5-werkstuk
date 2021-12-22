@@ -52,8 +52,8 @@ test('check if signup req.body is valid', () => {
     expect(isSignUpRequestValid({...requestBody, username: "LorenzReweghs9876412657813"})).toBeFalsy();
     expect(isSignUpRequestValid({...requestBody, username: "Lorenz&%Reweghs"})).toBeFalsy();
 
-    // An email must contain an @ symbol, but no other special characters.
-    expect(isSignUpRequestValid({...requestBody, email: "lorenz#reweghs@student.be"})).toBeFalsy();
+    // An email must contain an @ symbol and needs to contain at least a character before the @ symbol and before the extension.
+    expect(isSignUpRequestValid({...requestBody, email: "lorenz@.be"})).toBeFalsy();
     expect(isSignUpRequestValid({...requestBody, email: "lorenz.student.be"})).toBeFalsy();
 
     // A password must contain at least 8 characters, with at least one digit, one lower case and one upper case character.

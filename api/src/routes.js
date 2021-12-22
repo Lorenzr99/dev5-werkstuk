@@ -4,6 +4,66 @@ const {
 const express = require('express');
 const festivalRouter = express.Router();
 const requestRouter = express.Router();
+const signUpRouter = express.Router();
+
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const isSignUpRequestValid = (body) => {
+    if (body && JSON.stringify(body) !== '{}') {
+        const usernameRegex = /^[a-zA-Z0-9]{3,25}$/;
+        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+
+        if (usernameRegex.test(body.username) &&
+            body.date_birth.match(dateRegex) &&
+            passwordRegex.test(body.password)) {
+                const birthDateTime = new Date(body.date_birth).getTime();
+
+            if (!birthDateTime &&
+                birthDateTime !== 0) {
+                    return false;
+            }
+            return true;
+        }
+    }
+    return false;
+}
+
+const postSignUpHandler = (req, res) => {
+    if(isSignUpRequestValid(req.body)) {
+        bcrypt.hash(req.body.password, 10, function (err, hashedPassword) {
+            if (err) {
+                console.log(err);
+                res.status(400).json({
+                    error: err
+                });
+            }
+
+            pg('users')
+                .insert({
+                    username: req.body.username,
+                    email: req.body.email,
+                    password: hashedPassword,
+                    date_birth: req.body.date_birth,
+                }, 'email')
+                .then(email => {
+                    res.status(200).json(email);
+                })
+                .catch((e) => {
+                    console.log(e);
+                    res.status(400).json({
+                        message: "Kon user niet registreren!"
+                    })
+                });
+        });        
+    } else {
+        console.log("Ongeldige request body!");
+        res.status(400).json({
+            message: "Ongeldige request body!"
+        });
+    }
+}
 
 /**
  * Handler of the 'GET /festivals & GET /requests' endpoint.
@@ -122,6 +182,13 @@ const deleteFestivalHandler = (req, res, table) => {
 }
 
 /**
+ * Endpoint from the '/signup' route.
+ */
+
+signUpRouter.route('/signup')
+    .post(postSignUpHandler);
+
+/**
  * All endpoints from the '/festivals' route.
  */
 
@@ -142,5 +209,7 @@ requestRouter.route('/requests')
 module.exports = {
     festivalRouter,
     requestRouter,
+    signUpRouter,
     isFestivalRequestValid,
+    isSignUpRequestValid,
 };

@@ -8,7 +8,7 @@ describe('SignUp', () => {
             .send({
                 username: "Lorenz Reweghs",
                 email: "lorenz@student.be",
-                password: "lorenz123",
+                password: "Lorenz123",
                 date_birth: "1999-03-02",
             })
             .set('Accept', 'application/json')

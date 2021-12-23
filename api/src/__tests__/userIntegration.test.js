@@ -21,3 +21,21 @@ describe('SignUp', () => {
             .then(res => done());
     });
 });
+
+describe('Login', () => {
+    test('POST / endpoint', (done) => {
+        request.post('/api/login')
+            .send({
+                email: "lorenz@student.be",
+                password: "Lorenz123"
+            })
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .then(res => {
+                expect(res.status).toBe(200);
+                expect(res.body).toBeDefined();
+                expect(res.body[0].email).toEqual("lorenz@student.be");
+            })
+            .then(res => done());
+    })
+})

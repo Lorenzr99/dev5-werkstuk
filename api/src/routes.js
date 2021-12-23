@@ -83,6 +83,15 @@ const postSignUpHandler = (req, res) => {
     }
 }
 
+/**
+ * Handler of the 'POST /login' endpoint.
+ * Gets the user, compares its password with req.body.password
+ * and sends the email & a token of the user back as a JSON response.
+ * @param {*} req contains the request of the user 
+ * @param {*} res sends the response to the user
+ * @returns {object} the email & a verification token is returned as a JSON object
+ */
+
 const postLoginHandler = (req, res) => {
     pg('users')
         .where('email', req.body.email)

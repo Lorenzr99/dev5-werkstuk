@@ -88,7 +88,7 @@ const postLoginHandler = (req, res) => {
         .where('email', req.body.email)
         .then((user) => {
             if(user) {
-                bcrypt.compare(req.body.password, user.password, (error, result) => {
+                bcrypt.compare(req.body.password, user[0].password, (error, result) => {
                     if (error) {
                         console.log(error);
                         res.status(400).json({
@@ -98,12 +98,12 @@ const postLoginHandler = (req, res) => {
 
                     if(result) {
                         const token = jwt.sign({
-                            email: user.email
-                        }, process.env.SECRET, {
+                            email: user[0].email
+                        }, `${process.env.SECRET}`, {
                             expiresIn: '24h'
                         });
                         res.status(200).json({
-                            user: user.email,
+                            email: user[0].email,
                             token,
                         });
                     } else {

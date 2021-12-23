@@ -7,12 +7,19 @@ Deze rest-full API is verbonden met een [PostgreSQL](https://www.postgresql.org/
 1. git clone https://github.com/Lorenzr99/dev5-werkstuk
 2. .env file aanmaken op basis van .env.template
 3. docker-compose up --build
-4. Om de testen uit te voeren: 
-- cd .\api\
-- npm test
+4. Om de testen uit te voeren: "cd .\api\" en run vervolgens "npm test"
 
-Indien de API geen verbinding kan maken met de database,
-volstaat het om nodemon in de API te triggeren nadat de database aangeeft dat deze connecties kan ontvangen.
+## Endpoints
+- POST '/api/signup': registreert een gebruiker in de database
+- POST '/api/login': login met een gekend emailadres en krijg een token terug
+- GET '/api/festivals': returnt alle festivals in de database
+- POST '/api/festivals': voegt een festival toe aan de database
+- PUT '/api/festivals': wijzig een row in de festivals table
+- DELETE '/api/festivals': verwijder een row in de festivals table
+- GET '/api/requests': returnt alle requests in de database
+- POST '/api/requests': voegt een aanvraag toe aan de database
+- PUT '/api/requests': wijzig een row in de requests table
+- DELETE '/api/requests': verwijder een row in de requests table
 
 ## Docs
 [Contributing guidelines](./CONTRIBUTING.md)<br>

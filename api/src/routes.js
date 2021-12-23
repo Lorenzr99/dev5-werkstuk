@@ -9,6 +9,12 @@ const signUpRouter = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+/**
+ * Checks if the signup request body is valid.
+ * @param {request} body the request body sent by the user
+ * @returns {boolean} true if request is valid, false if request is invalid
+ */
+
 const isSignUpRequestValid = (body) => {
     if (body && JSON.stringify(body) !== '{}') {
         const usernameRegex = /^[a-zA-Z0-9 ]{3,25}$/;
@@ -31,6 +37,15 @@ const isSignUpRequestValid = (body) => {
     }
     return false;
 }
+
+/**
+ * Handler of the 'POST /signup' endpoint.
+ * Hashes the password, inserts the user data
+ * and sends the email of the new user back as a JSON response.
+ * @param {*} req contains the request of the user 
+ * @param {*} res sends the response to the user
+ * @returns {object} the inserted email is returned as a JSON object
+ */
 
 const postSignUpHandler = (req, res) => {
     if(isSignUpRequestValid(req.body)) {

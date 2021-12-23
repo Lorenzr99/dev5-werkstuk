@@ -17,14 +17,8 @@ beforeAll(async () => {
             date_begin: "2022-06-16",
             date_end: "2022-06-19",
         });
-        await pg('requests').insert({
-            id: 2,
-            name: "Lokerse Feesten",
-            date_begin: "2022-08-05",
-            date_end: "2022-08-14",
-        });
 
-        console.log("Request test rows inserted");        
+        console.log("Request test row inserted");        
     } catch (e) {
         console.log(e);
     }
@@ -40,6 +34,27 @@ describe('requestRouter', () => {
                 expect(res.body).toBeDefined();
                 expect(res.body).not.toBeNull();
                 expect(res.body.length).toBeGreaterThan(0);
+            })
+            .then(res => done());
+    });
+
+    test('POST / endpoint', (done) => {
+        request.post('/api/requests')
+            .send({
+                id: 2,
+                name: "Lokerse Feesten",
+                date_begin: "2022-08-05",
+                date_end: "2022-08-14",
+                description: "",
+            })
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .then(res => {
+                expect(res.status).toBe(200);
+                expect(res.body).toBeDefined();
+                expect(res.body[0].name).toEqual("Lokerse Feesten");
+                expect(res.body[0].date_begin).toEqual("2022-08-05");
+                expect(res.body[0].date_end).toEqual("2022-08-14");
             })
             .then(res => done());
     });

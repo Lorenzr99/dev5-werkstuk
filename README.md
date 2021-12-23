@@ -13,9 +13,11 @@ Deze rest-full API is verbonden met een [PostgreSQL](https://www.postgresql.org/
 - POST '/api/signup': registreert een gebruiker in de database
 - POST '/api/login': login met een gekend emailadres en krijg een token terug
 - GET '/api/festivals': returnt alle festivals in de database
+- POST '/api/festivals': voegt een festival toe aan de database
 - PUT '/api/festivals': wijzig een row in de festivals table
 - DELETE '/api/festivals': verwijder een row in de festivals table
 - GET '/api/requests': returnt alle requests in de database
+- POST '/api/requests': voegt een aanvraag toe aan de database
 - PUT '/api/requests': wijzig een row in de requests table
 - DELETE '/api/requests': verwijder een row in de requests table
 

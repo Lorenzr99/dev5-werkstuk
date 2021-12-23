@@ -183,6 +183,33 @@ const isFestivalRequestValid = (body) => {
     return false;
 }
 
+const postFestivalHandler = (req, res, table) => {
+    if(isFestivalRequestValid(req.body)) {
+        pg(table)
+            .insert({
+                id: req.body.id,
+                name: req.body.name,
+                date_begin: req.body.date_begin,
+                date_end: req.body.date_end,
+                description: req.body.description,
+            }, '*')
+            .then(festival => {
+                res.status(200).json(festival);
+            })
+            .catch((e) => {
+                console.log(e);
+                res.status(400).json({
+                    message: "Kon festival niet toevoegen!"
+                })
+            });    
+    } else {
+        console.log("Ongeldige request body!");
+        res.status(400).json({
+            message: "Ongeldige request body!"
+        });
+    }
+}
+
 /**
  * Handler of the 'PUT /festivals & PUT /requests' endpoint.
  * Updates all values of a row with the specified 'id'
@@ -265,6 +292,7 @@ loginRouter.route('/login')
 
 festivalRouter.route('/festivals')
     .get((req, res) => getAllFestivalsHandler(req, res, "festivals"))
+    .post((req, res) => postFestivalHandler(req, res, "festivals"))
     .put((req, res) => updateFestivalHandler(req, res, "festivals"))
     .delete((req, res) => deleteFestivalHandler(req, res, "festivals"));
 
@@ -274,6 +302,7 @@ festivalRouter.route('/festivals')
 
 requestRouter.route('/requests')
     .get((req, res) => getAllFestivalsHandler(req, res, "requests"))
+    .post((req, res) => postFestivalHandler(req, res, "requests"))
     .put((req, res) => updateFestivalHandler(req, res, "requests"))
     .delete((req, res) => deleteFestivalHandler(req, res, "requests"));
 

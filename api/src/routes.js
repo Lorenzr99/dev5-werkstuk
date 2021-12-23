@@ -49,11 +49,11 @@ const isSignUpRequestValid = (body) => {
 
 const postSignUpHandler = (req, res) => {
     if(isSignUpRequestValid(req.body)) {
-        bcrypt.hash(req.body.password, 10, function (err, hashedPassword) {
-            if (err) {
-                console.log(err);
+        bcrypt.hash(req.body.password, 10, (error, hashedPassword) => {
+            if (error) {
+                console.log(error);
                 res.status(400).json({
-                    error: err
+                    error
                 });
             }
 
@@ -80,6 +80,43 @@ const postSignUpHandler = (req, res) => {
             message: "Ongeldige request body!"
         });
     }
+}
+
+const postLoginHandler = (req, res) => {
+    pg('users')
+        .where('email', req.body.email)
+        .then((user) => {
+            if(user) {
+                bcrypt.compare(req.body.password, user.password, (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        res.status(400).json({
+                            error
+                        });
+                    }
+
+                    if(result) {
+                        const token = jwt.sign({
+                            email: user.email
+                        }, process.env.SECRET, {
+                            expiresIn: '24h'
+                        });
+                        res.status(200).json({
+                            user: user.email,
+                            token,
+                        });
+                    } else {
+                        res.status(401).json({
+                            message: 'Het wachtwoord is niet juist!'
+                        });
+                    }
+                })
+            } else {
+                res.status(404).json({
+                    message: 'User is niet gevonden!'
+                })
+            }
+        })
 }
 
 /**

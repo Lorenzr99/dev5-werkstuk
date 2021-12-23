@@ -5,6 +5,7 @@ const express = require('express');
 const festivalRouter = express.Router();
 const requestRouter = express.Router();
 const signUpRouter = express.Router();
+const loginRouter = express.Router();
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -49,11 +50,11 @@ const isSignUpRequestValid = (body) => {
 
 const postSignUpHandler = (req, res) => {
     if(isSignUpRequestValid(req.body)) {
-        bcrypt.hash(req.body.password, 10, function (err, hashedPassword) {
-            if (err) {
-                console.log(err);
+        bcrypt.hash(req.body.password, 10, (error, hashedPassword) => {
+            if (error) {
+                console.log(error);
                 res.status(400).json({
-                    error: err
+                    error
                 });
             }
 
@@ -80,6 +81,52 @@ const postSignUpHandler = (req, res) => {
             message: "Ongeldige request body!"
         });
     }
+}
+
+/**
+ * Handler of the 'POST /login' endpoint.
+ * Gets the user, compares its password with req.body.password
+ * and sends the email & a token of the user back as a JSON response.
+ * @param {*} req contains the request of the user 
+ * @param {*} res sends the response to the user
+ * @returns {object} the email & a verification token is returned as a JSON object
+ */
+
+const postLoginHandler = (req, res) => {
+    pg('users')
+        .where('email', req.body.email)
+        .then((user) => {
+            if(user) {
+                bcrypt.compare(req.body.password, user[0].password, (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        res.status(400).json({
+                            error
+                        });
+                    }
+
+                    if(result) {
+                        const token = jwt.sign({
+                            email: user[0].email
+                        }, `${process.env.SECRET}`, {
+                            expiresIn: '24h'
+                        });
+                        res.status(200).json({
+                            email: user[0].email,
+                            token,
+                        });
+                    } else {
+                        res.status(401).json({
+                            message: 'Het wachtwoord is niet juist!'
+                        });
+                    }
+                })
+            } else {
+                res.status(404).json({
+                    message: 'User is niet gevonden!'
+                })
+            }
+        })
 }
 
 /**
@@ -206,6 +253,13 @@ signUpRouter.route('/signup')
     .post(postSignUpHandler);
 
 /**
+ * Endpoint from the '/login' route.
+ */
+
+loginRouter.route('/login')
+    .post(postLoginHandler);
+
+/**
  * All endpoints from the '/festivals' route.
  */
 
@@ -227,6 +281,7 @@ module.exports = {
     festivalRouter,
     requestRouter,
     signUpRouter,
+    loginRouter,
     isFestivalRequestValid,
     isSignUpRequestValid,
 };

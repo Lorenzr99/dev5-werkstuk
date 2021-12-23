@@ -44,25 +44,35 @@ beforeAll(async () => {
 });
 
 describe('complete postgres api test', () => {
-    test('full circle', (done) => {
+    test('full circle', async () => {
         try {
-            request.post('/api/signup')
+            await request.post('/api/signup')
                 .send({
                     username: "Lorenz Reweghs",
-                    email: "lorenz@student.be",
+                    email: "lorenz@email.be",
                     password: "Lorenz123",
                     date_birth: "1999-03-02",
                 })
                 .set('Accept', 'application/json')
                 .expect(200)
                 .then(res => {
-                    expect(res.body[0]).toEqual("lorenz@student.be");
+                    expect(res.body[0]).toEqual("lorenz@email.be");
                 })
-            request.get('/api/requests')
+            await request.post('/api/login')
+                .send({
+                    email: "lorenz@email.be",
+                    password: "Lorenz123",
+                })
+                .set('Accept', 'application/json')
+                .expect(200)
+                .then(res => {
+                    expect(res.body.email).toEqual("lorenz@email.be");
+                })
+            await request.get('/api/requests')
                 .expect(200);
-            request.get('/api/festivals')
+            await request.get('/api/festivals')
                 .expect(200);
-            request.put('/api/requests')
+            await request.put('/api/requests')
                 .send({
                     id: 1,
                     name: "Graspop",
@@ -77,7 +87,7 @@ describe('complete postgres api test', () => {
                     expect(res.body[0].date_end).toEqual("2023-06-15");
                     expect(res.body[0].description).toEqual("Graspop Metal Meeting is een jaarlijks meerdaags metalfestival in Dessel.");
                 });
-            request.put('/api/festivals')
+            await request.put('/api/festivals')
                 .send({
                     id: 3,
                     name: "Rock Werchter",
@@ -92,19 +102,18 @@ describe('complete postgres api test', () => {
                     expect(res.body[0].date_end).toEqual("2022-07-18");
                     expect(res.body[0].description).toEqual("Rock Werchter is een pop- en rockfestival dat elk jaar plaatsvindt in het dorpje Werchter.");
                 });
-            request.del('/api/requests')
+            await request.del('/api/requests')
                 .send({id: 2})
                 .expect(200)
                 .then(res => {
                     expect(res.body[0]).toEqual(2);
                 });
-            request.del('/api/festivals')
+            await request.del('/api/festivals')
                 .send({id: 4})
                 .expect(200)
                 .then(res => {
                     expect(res.body[0]).toEqual(4);
                 })
-                .then(res => done());
         } catch (e) {
             throw e;
         }
@@ -117,6 +126,8 @@ afterAll(async () => {
         await pg('requests').where('name', 'Lokerse Feesten').del();
         await pg('festivals').where('name', 'Rock Werchter').del();
         await pg('festivals').where('name', 'Reggae Geel').del();
+        await pg('users').where('email', 'lorenz@email.be').del();
+        await pg('users').where('email', 'lorenz@student.be').del();
         await pg.destroy();
     } catch (e) {
         console.log(e);

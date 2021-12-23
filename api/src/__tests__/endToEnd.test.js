@@ -17,23 +17,11 @@ beforeAll(async () => {
             date_begin: "2022-06-16",
             date_end: "2022-06-19",
         });
-        await pg('requests').insert({
-            id: 2,
-            name: "Lokerse Feesten",
-            date_begin: "2022-08-05",
-            date_end: "2022-08-14",
-        });
         await pg('festivals').insert({
             id: 3,
             name: "Rock Werchter",
             date_begin: "2022-06-30",
             date_end: "2022-07-03",
-        });
-        await pg('festivals').insert({
-            id: 4,
-            name: "Reggae Geel",
-            date_begin: "2022-08-04",
-            date_end: "2022-08-06",
         });
 
         console.log("endToEnd test rows inserted");
@@ -72,6 +60,36 @@ describe('complete postgres api test', () => {
                 .expect(200);
             await request.get('/api/festivals')
                 .expect(200);
+            await request.post('/api/requests')
+                .send({
+                    id: 2,
+                    name: "Lokerse Feesten",
+                    date_begin: "2022-08-05",
+                    date_end: "2022-08-14",
+                    description: "",
+                })
+                .set('Accept', 'application/json')
+                .expect(200)
+                .then(res => {
+                    expect(res.body[0].name).toEqual("Lokerse Feesten");
+                    expect(res.body[0].date_begin).toEqual("2022-08-05");
+                    expect(res.body[0].date_end).toEqual("2022-08-14");
+                })
+            await request.post('/api/festivals')
+                .send({
+                    id: 4,
+                    name: "Reggae Geel",
+                    date_begin: "2022-08-04",
+                    date_end: "2022-08-06",
+                    description: "",
+                })
+                .set('Accept', 'application/json')
+                .expect(200)
+                .then(res => {
+                    expect(res.body[0].name).toEqual("Reggae Geel");
+                    expect(res.body[0].date_begin).toEqual("2022-08-04");
+                    expect(res.body[0].date_end).toEqual("2022-08-06");
+                })
             await request.put('/api/requests')
                 .send({
                     id: 1,

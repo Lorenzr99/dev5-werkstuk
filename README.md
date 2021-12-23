@@ -10,6 +10,7 @@ Deze rest-full API is verbonden met een [PostgreSQL](https://www.postgresql.org/
 4. Om de testen uit te voeren: "cd .\api\" en run vervolgens "npm test"
 
 ## Endpoints
+- POST '/api/signup': registreert een gebruiker in de database
 - GET '/api/festivals': returnt alle festivals in de database
 - PUT '/api/festivals': wijzig een row in de festivals table
 - DELETE '/api/festivals': verwijder een row in de festivals table

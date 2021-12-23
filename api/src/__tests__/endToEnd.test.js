@@ -24,13 +24,13 @@ beforeAll(async () => {
             date_end: "2022-08-14",
         });
         await pg('festivals').insert({
-            id: 1,
+            id: 3,
             name: "Rock Werchter",
             date_begin: "2022-06-30",
             date_end: "2022-07-03",
         });
         await pg('festivals').insert({
-            id: 2,
+            id: 4,
             name: "Reggae Geel",
             date_begin: "2022-08-04",
             date_end: "2022-08-06",
@@ -46,6 +46,18 @@ beforeAll(async () => {
 describe('complete postgres api test', () => {
     test('full circle', (done) => {
         try {
+            request.post('/api/signup')
+                .send({
+                    username: "Lorenz Reweghs",
+                    email: "lorenz@student.be",
+                    password: "Lorenz123",
+                    date_birth: "1999-03-02",
+                })
+                .set('Accept', 'application/json')
+                .expect(200)
+                .then(res => {
+                    expect(res.body[0]).toEqual("lorenz@student.be");
+                })
             request.get('/api/requests')
                 .expect(200);
             request.get('/api/festivals')
@@ -67,7 +79,7 @@ describe('complete postgres api test', () => {
                 });
             request.put('/api/festivals')
                 .send({
-                    id: 1,
+                    id: 3,
                     name: "Rock Werchter",
                     date_begin: "2022-07-15",
                     date_end: "2022-07-18",
@@ -87,10 +99,10 @@ describe('complete postgres api test', () => {
                     expect(res.body[0]).toEqual(2);
                 });
             request.del('/api/festivals')
-                .send({id: 2})
+                .send({id: 4})
                 .expect(200)
                 .then(res => {
-                    expect(res.body[0]).toEqual(2);
+                    expect(res.body[0]).toEqual(4);
                 })
                 .then(res => done());
         } catch (e) {

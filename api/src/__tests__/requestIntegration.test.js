@@ -45,6 +45,7 @@ describe('requestRouter', () => {
                 name: "Lokerse Feesten",
                 date_begin: "2022-08-05",
                 date_end: "2022-08-14",
+                description: "",
             })
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)

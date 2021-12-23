@@ -45,6 +45,7 @@ describe('festivalRouter', () => {
                 name: "Reggae Geel",
                 date_begin: "2022-08-04",
                 date_end: "2022-08-06",
+                description: "",
             })
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)

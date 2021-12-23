@@ -58,6 +58,16 @@ describe('complete postgres api test', () => {
                 .then(res => {
                     expect(res.body[0]).toEqual("lorenz@student.be");
                 })
+            request.post('/api/login')
+                .send({
+                    email: "lorenz@student.be",
+                    password: "Lorenz123",
+                })
+                .set('Accept', 'application/json')
+                .expect(200)
+                .then(res => {
+                    expect(res.body[0].email).toEqual("lorenz@student.be");
+                })
             request.get('/api/requests')
                 .expect(200);
             request.get('/api/festivals')

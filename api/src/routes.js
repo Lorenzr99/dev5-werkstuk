@@ -5,6 +5,7 @@ const express = require('express');
 const festivalRouter = express.Router();
 const requestRouter = express.Router();
 const signUpRouter = express.Router();
+const loginRouter = express.Router();
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -243,6 +244,13 @@ signUpRouter.route('/signup')
     .post(postSignUpHandler);
 
 /**
+ * Endpoint from the '/login' route.
+ */
+
+loginRouter.route('/login')
+    .post(postLoginHandler);
+
+/**
  * All endpoints from the '/festivals' route.
  */
 
@@ -264,6 +272,7 @@ module.exports = {
     festivalRouter,
     requestRouter,
     signUpRouter,
+    loginRouter,
     isFestivalRequestValid,
     isSignUpRequestValid,
 };

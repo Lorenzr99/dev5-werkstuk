@@ -17,14 +17,8 @@ beforeAll(async () => {
             date_begin: "2022-06-30",
             date_end: "2022-07-03",
         });
-        await pg('festivals').insert({
-            id: 2,
-            name: "Reggae Geel",
-            date_begin: "2022-08-04",
-            date_end: "2022-08-06",
-        });
 
-        console.log("Festival test rows inserted");        
+        console.log("Festival test row inserted");        
     } catch (e) {
         console.log(e);
     }
@@ -40,6 +34,26 @@ describe('festivalRouter', () => {
                 expect(res.body).toBeDefined();
                 expect(res.body).not.toBeNull();
                 expect(res.body.length).toBeGreaterThan(0);
+            })
+            .then(res => done());
+    });
+
+    test('POST / endpoint', (done) => {
+        request.post('/api/festivals')
+            .send({
+                id: 2,
+                name: "Reggae Geel",
+                date_begin: "2022-08-04",
+                date_end: "2022-08-06",
+            })
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .then(res => {
+                expect(res.status).toBe(200);
+                expect(res.body).toBeDefined();
+                expect(res.body[0].name).toEqual("Reggae Geel");
+                expect(res.body[0].date_begin).toEqual("2022-08-04");
+                expect(res.body[0].date_end).toEqual("2022-08-06");
             })
             .then(res => done());
     });

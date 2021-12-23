@@ -34,8 +34,8 @@ describe('Login', () => {
             .then(res => {
                 expect(res.status).toBe(200);
                 expect(res.body).toBeDefined();
-                expect(res.body[0].email).toEqual("lorenz@student.be");
+                expect(res.body.email).toEqual("lorenz@student.be");
             })
             .then(res => done());
-    })
-})
+    });
+});

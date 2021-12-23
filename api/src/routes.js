@@ -183,6 +183,16 @@ const isFestivalRequestValid = (body) => {
     return false;
 }
 
+/**
+ * Handler of the 'POST /festivals & POST /requests' endpoint.
+ * Inserts a festival with an id, name, date_begin, date_end & description
+ * and sends the festival object back as a JSON response.
+ * @param {*} req contains the request of the user 
+ * @param {*} res sends the response to the user
+ * @param {string} table the table which will be targeted
+ * @returns {object} the festival is returned as a JSON object
+ */
+
 const postFestivalHandler = (req, res, table) => {
     if(isFestivalRequestValid(req.body)) {
         pg(table)
